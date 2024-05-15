@@ -1,4 +1,4 @@
-//Generate a random number between 1 and 500
+//Generate a random number between 1 and 100
 let randomNumber = parseInt((Math.random() * 100) + 1);
 const submit = document.querySelector('#subt');
 const userInput = document.querySelector('#guessField');
@@ -11,6 +11,26 @@ let previousGuesses = [];
 let numGuesses = 1;
 let playGame = true;
 let remainingTime = 30;
+
+
+function decrementTime() {
+  // 1. decrementar la variable de estado 'remainingTime' en 1
+  remainingTime--;
+  // 2. actualizar el textcontent <span id="timer">
+  document.querySelector('#timer').textContent = remainingTime;
+
+  // 3. Mirar si la variable de estado ha llegado a 0
+  if (remainingTime == 0) {
+    // 3.1 Si es así, tenemos que mostrar un mensaje indicando que el tiempo se ha acabado. Buscad en el código, porque existe una función para hacer esto. Además, existe una función para indicar que el juego ha acabado: ejecutadla también. 3 líneas de código
+    displayMessage("Time's up!");
+    endGame();
+
+  }
+
+}
+
+let interval = setInterval(decrementTime, 1000);
+
 
 if (playGame) {
   subt.addEventListener('click', function (e) {
@@ -78,6 +98,8 @@ function endGame() {
   p.innerHTML = `<h1 id="newGame">Start New Game</h1>`
   startOver.appendChild(p);
   playGame = false;
+  clearInterval(interval);
+
   newGame();
 }
 
@@ -94,6 +116,8 @@ function newGame() {
     userInput.removeAttribute('disabled');
     startOver.removeChild(p);
     playGame = true;
+    remainingTime = 30;
+    interval = setInterval(decrementTime, 1000);
   })
 }
 //Allow to restart game with restart button
